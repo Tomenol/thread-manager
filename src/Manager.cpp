@@ -32,8 +32,6 @@ bool Manager::isActive()
 
 void Manager::stop()
 {
-	//print(std::stringstream() << "stopping Manager..." << endl);
-
 	_mngr_status = _mngrStatusInactive;
 
 	waitForTasks();
@@ -46,44 +44,39 @@ void Manager::stop()
 		_tsk_queue.clear();
 		_mutex.unlock();
 	}
-
-	//print(std::stringstream() << "Manager has been stopped." << endl);
 }
 
 void Manager::printTaskQueue()
 {
-	//print(std::stringstream() << "Task Queue Status :");
 	_mutex.lock();
 	for (int i = 0; i < _tsk_queue.size(); i++)
 	{
-		//print(std::stringstream() << "Task ID " << i << " : " << &_tsk_queue[i]);
+		print(std::stringstream() << "Task ID " << i << " : " << &_tsk_queue[i]);
 	}
 	_mutex.unlock();
 }
 
 void Manager::printStatus()
 {
-	//print(std::stringstream() << "Thread Manager Status :\n");
+	print(std::stringstream() << "Thread Manager Status :\n");
 	
 	for (int i = 0; i < _wkr_cnt; i++)
-	{
-		//print(std::stringstream() << "	Worker " << i << " is " << (_workers[i].getStatus() == 1 ? "Active" : "Inactive"));
-	}
+		print(std::stringstream() << "	Worker " << i << " is " << (_workers[i].getStatus() == 1 ? "Active" : "Inactive"));
 }
 
 bool Manager::getNextTask(struct Task &_tsk)
 {
-	bool _isGet = false;
+	bool _iflag = false;
 
 	if (_tsk_queue.empty() == false)
 	{
 		_tsk = _tsk_queue.front();
 		_tsk_queue.pop_front();
 
-		_isGet = true;
+		_iflag = true;
 	}
 
-	return _isGet;
+	return _iflag;
 }
 
 void Manager::waitForTasks()
@@ -91,7 +84,7 @@ void Manager::waitForTasks()
 	int _wkr_done, _cnt = 0;
 	bool _empt = false;
 
-	//print(std::stringstream() << "Waiting for tasks to be completed...");
+	print(std::stringstream() << "Waiting for tasks to be completed...");
 
 	do
 	{
@@ -111,7 +104,7 @@ void Manager::waitForTasks()
 
 	} while (_empt == false || _cnt < _wkr_cnt);
 
-	//print(std::stringstream() << "All tasks are completed.");
+	print(std::stringstream() << "All tasks are completed.");
 }
 
 void Manager::start()
